@@ -2,6 +2,7 @@ package com.dharmapal.camerax_api
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.dharmapal.camerax_api.databinding.ActivityMainBinding
+import com.example.videoplayer.MainActivity2
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
@@ -81,6 +83,17 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+//        viewBinding.btnChangecamera.setOnClickListener {
+//            if (cameraSelector==CameraSelector.DEFAULT_BACK_CAMERA){
+//                cameraSelector=CameraSelector.DEFAULT_FRONT_CAMERA
+//                startCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
+//            }
+//            else{
+//                cameraSelector= CameraSelector.DEFAULT_BACK_CAMERA
+//                startCamera()
+//            }
+//        }
+
         // create and start a new recording session
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
@@ -118,8 +131,8 @@ class MainActivity : AppCompatActivity() {
                         if (!recordEvent.hasError()) {
                             val msg = "Video capture succeeded: " +
                                     "${recordEvent.outputResults.outputUri}"
-                            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT)
-                                .show()
+//                            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT)
+//                                .show()
                             Log.d(TAG, msg)
                         } else {
                             recording?.close()
@@ -129,6 +142,12 @@ class MainActivity : AppCompatActivity() {
                         }
                         viewBinding.videoCaptureButton.apply {
                             setImageResource(R.drawable.video)
+
+                            val intent=Intent(this@MainActivity,MainActivity2::class.java)
+                            val myUri=recordEvent.outputResults.outputUri
+
+                            intent.putExtra("uri",myUri.toString())
+                            startActivity(intent)
                             isEnabled = true
                         }
                     }
@@ -170,8 +189,9 @@ class MainActivity : AppCompatActivity() {
 
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
+
                     val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                 }
             }
@@ -188,6 +208,7 @@ class MainActivity : AppCompatActivity() {
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
+
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -198,6 +219,7 @@ class MainActivity : AppCompatActivity() {
                 .also {
                     it.setSurfaceProvider(viewBinding.viewFinder.surfaceProvider)
                 }
+
             val recorder = Recorder.Builder()
                 .setQualitySelector(QualitySelector.from(Quality.HIGHEST,
                     FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))

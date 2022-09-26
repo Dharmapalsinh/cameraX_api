@@ -4,9 +4,11 @@
     package="com.dharmapal.camerax_api">
 
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
     <application
@@ -19,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraX_api"
         tools:targetApi="31">
+        <activity
+            android:name="com.example.videoplayer.MainActivity2"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
